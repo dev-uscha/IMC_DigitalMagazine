@@ -9,3 +9,11 @@ An interactive magazine in VR. https://www.canva.com/design/DAGkay1w_08/99YDjysf
 
 Lilian Drabinski
 Hanna Mielczarek
+
+Useful Links:
+https://polyhaven.com
+https://ambientcg.com
+
+Credits:
+https://ambientcg.com/view?id=Marble021
+https://polyhaven.com/a/kloppenheim_07_puresky
