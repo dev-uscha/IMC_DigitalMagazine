@@ -51,49 +51,46 @@ public class PageManager : MonoBehaviour
 
         List<Coroutine> rotations = new List<Coroutine>();
 
-        if(direction == "forward")
+        if (direction == "forward")
+    {
+        if (currentPageIndex < pages.Length)
         {
-            Debug.Log("Current Page Index- foreward: " + currentPageIndex);
-            // Vorherige Seite schließen (falls vorhanden)
-            if (currentPageIndex > 0)
-            {
-                rotations.Add(StartCoroutine(RotatePage(pages[currentPageIndex - 1], 180f)));
-            }
-
-            // Aktuelle Seite öffnen
+            // Aktuelle Seite umblättern
             rotations.Add(StartCoroutine(RotatePage(pages[currentPageIndex], 180f)));
         }
-        else if (direction == "backward")
-        {
-            Debug.Log("Current Page Index - backward: " + currentPageIndex);
 
-            // Vorherige Seite wieder schließen
-            if (currentPageIndex < pages.Length)  // Vorherige Seite schließen (falls vorhanden)
-            {
-                rotations.Add(StartCoroutine(RotatePage(pages[currentPageIndex], -180f)));
-            }
-            // Aktuelle Seite schließen (z. B. Seite 2 → Rotation zurück)
-            rotations.Add(StartCoroutine(RotatePage(pages[currentPageIndex -1], -180f)));
-        }
-
-        foreach (Coroutine rot in rotations)
-        {
-            yield return rot;
-        }
-
-        if(direction == "forward")
-        {
-            Debug.Log("Current Page Index- foreward: " + currentPageIndex);
-            currentPageIndex++;
-        }
-        else if (direction == "backward")
-        {
-            Debug.Log("Current Page Index- backward: " + currentPageIndex);
-            currentPageIndex--;
-        }
-        //currentPageIndex++;
-        isRotating = false;
+        // Optional: Vorherige Seite nochmal schließen (optisch)
+        // if (currentPageIndex > 0)
+        // {
+        //     rotations.Add(StartCoroutine(RotatePage(pages[currentPageIndex - 1], 180f)));
+        // }
     }
+    else if (direction == "backward")
+    {
+        if (currentPageIndex > 0)
+        {
+            // Vorherige Seite wieder sichtbar machen
+            rotations.Add(StartCoroutine(RotatePage(pages[currentPageIndex - 1], -180f)));
+        }
+    }
+
+    foreach (Coroutine rot in rotations)
+    {
+        yield return rot;
+    }
+
+    // Index anpassen nach der Aktion
+    if (direction == "forward" && currentPageIndex < pages.Length)
+    {
+        currentPageIndex++;
+    }
+    else if (direction == "backward" && currentPageIndex > 0)
+    {
+        currentPageIndex--;
+    }
+
+    isRotating = false;
+}
 
     private IEnumerator RotatePage(Transform page, float angle)
     {
