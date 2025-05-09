@@ -147,7 +147,7 @@ public class PageManager : MonoBehaviour
         // Am Ende die Rotation exakt setzen, um Ungenauigkeiten zu vermeiden
         page.rotation = endRot;
     }
-<<<<<<< HEAD
+
 
     //Methode zur Entgegennahme der Rotationsliste, um sie zu erweitern
     private IEnumerator AnimatePagePosition(Transform page, float targetYOffset, bool raise, List<Coroutine> rotations)
@@ -168,6 +168,6 @@ public class PageManager : MonoBehaviour
             yield return null;
         }
     }
-=======
->>>>>>> 54f56820b8070bcb71dffc9babebb3e2fc8a0fc3
+
+}
 }
