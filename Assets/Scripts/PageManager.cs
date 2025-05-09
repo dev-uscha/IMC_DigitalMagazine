@@ -147,4 +147,27 @@ public class PageManager : MonoBehaviour
         // Am Ende die Rotation exakt setzen, um Ungenauigkeiten zu vermeiden
         page.rotation = endRot;
     }
+
+
+    //Methode zur Entgegennahme der Rotationsliste, um sie zu erweitern
+    private IEnumerator AnimatePagePosition(Transform page, float targetYOffset, bool raise, List<Coroutine> rotations)
+    {
+        if (page == null) yield break;
+
+        float startY = page.localPosition.y;
+        float targetY = startY + targetYOffset * (raise ? 1 : -1);
+        float elapsed = 0f;
+
+        float animationDuration = rotationDuration / 2f;
+
+        while (elapsed < animationDuration)
+        {
+            float newY = Mathf.Lerp(startY, targetY, elapsed / animationDuration);
+            page.localPosition = new Vector3(page.localPosition.x, newY, page.localPosition.z);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+}
 }
