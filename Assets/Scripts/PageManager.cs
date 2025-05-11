@@ -2,141 +2,154 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-// Diese Klasse steuert das Umblättern von Seiten in einer 3D-Ansicht
 public class PageManager : MonoBehaviour
 {
-    // Referenz zum Elternelement, das alle Seiten als Kindobjekte enthält
     public Transform pagesParent;
-
-    // Dauer einer einzelnen Seitenrotation in Sekunden
     public float rotationDuration = 1.0f;
-
-    // Array mit allen Seiten (Transform-Komponenten)
     private Transform[] pages;
-
-    // Index der aktuellen Seite (beginnend bei 0)
     private int currentPageIndex = 0;
-
-    // Schutzvariable, um zu verhindern, dass mehrere Rotationen gleichzeitig laufen
     private bool isRotating = false;
 
-    private void Start()
+    public Transform BeigeBackgroundForPageLeft;
+    public Transform BeigeBackgroundForPageRight;
+   
+    
+    private void UpdatePageState(string direction)
     {
-        // Initialisiere das Seiten-Array mit allen direkten Kindern von pagesParent
+        if (currentPageIndex == 0 || currentPageIndex == 1 && direction == "backward")
+        {
+            BeigeBackgroundForPageLeft.gameObject.SetActive(false);
+            BeigeBackgroundForPageRight.gameObject.SetActive(true);
+        }
+        else if (currentPageIndex > 0 && direction == "forward" && currentPageIndex < pages.Length -2 || currentPageIndex > 1 && direction == "backward" && currentPageIndex < pages.Length - 1)
+        {
+            BeigeBackgroundForPageLeft.gameObject.SetActive(true);
+            BeigeBackgroundForPageRight.gameObject.SetActive(true);
+        }
+
+        else if (currentPageIndex == pages.Length)
+        {
+            BeigeBackgroundForPageLeft.gameObject.SetActive(true);
+            BeigeBackgroundForPageRight.gameObject.SetActive(false);
+        }
+        else if (currentPageIndex == pages.Length - 2 && direction == "forward") // methode könnte kritisch werden, wennn die letzte Seite erreicht wird. Zurzeit gibt es 5 seiten und die 5 wird nicht angezeigt
+         {
+            BeigeBackgroundForPageLeft.gameObject.SetActive(true);
+            BeigeBackgroundForPageRight.gameObject.SetActive(false);
+        }
+    
+    }
+   
+
+
+    private void Start()
+    {   BeigeBackgroundForPageLeft.gameObject.SetActive(false);
+    BeigeBackgroundForPageRight.gameObject.SetActive(true);
         int count = pagesParent.childCount;
         pages = new Transform[count];
 
-        // Fülle das Array mit den Seiten (Kindobjekte von pagesParent)
         for (int i = 0; i < count; i++)
         {
             pages[i] = pagesParent.GetChild(i);
         }
+        Debug.Log("Pages initialized: " + pages.Length);
+        
     }
 
-    // Methode zum Vorblättern
     public void FlipForward()
     {
-        Debug.Log("Flip Forward in Manager");
 
-        // Nur ausführen, wenn keine Rotation läuft und man nicht am Ende angekommen ist
         if (!isRotating && currentPageIndex < pages.Length)
         {
             Debug.Log("Starting Flip Forward in Manager");
-
-            // Starte die Routine zum gleichzeitigen Blättern
             StartCoroutine(FlipPagesSimultaneously("forward"));
         }
     }
 
-    // Methode zum Zurückblättern
     public void FlipBackward()
     {
-        Debug.Log("Flip Backward in Manager");
 
-        // Nur ausführen, wenn keine Rotation läuft und man nicht auf Seite 0 ist
         if (!isRotating && currentPageIndex > 0)
         {
             Debug.Log("Starting Flip Backward in Manager");
-
-            // Starte die Routine zum gleichzeitigen Rückblättern
             StartCoroutine(FlipPagesSimultaneously("backward"));
         }
     }
 
-   private IEnumerator FlipPagesSimultaneously(string direction)
-{
-    Debug.Log("Flip Pages Simultaneously in Manager in direction: " + direction);
-    isRotating = true; // Blockiert weitere Rotationen während der laufenden Animation
+    
 
-    // Liste, um mehrere laufende Coroutines zu verwalten
-    List<Coroutine> rotations = new List<Coroutine>();
-
-    if (direction == "forward")
+    private IEnumerator FlipPagesSimultaneously(string direction)
     {
-        Debug.Log("Current Page Index - forward: " + currentPageIndex);
-
-        // Vorherige Seite schließen, wenn nicht auf der allerersten Seite
-        if (currentPageIndex > 0)
+        Debug.Log("Flip Pages Simultaneously in Manager in direction: " + direction);
+        isRotating = true;
+        UpdatePageState(direction);
+        List<Coroutine> rotations = new List<Coroutine>();
+        int nextPageIndex = currentPageIndex + 1;
+        int prevPageIndex = currentPageIndex - 1;
+        
+        if (direction == "forward")
         {
-            rotations.Add(StartCoroutine(RotatePage(pages[currentPageIndex - 1], 180f)));
-        }
+            Debug.Log("Current Page Index - forward: " + currentPageIndex);
 
-        // Neue Seite öffnen (aktueller Index)
-        rotations.Add(StartCoroutine(RotatePage(pages[currentPageIndex], 180f)));
-
-        // Warte, bis alle Rotationen abgeschlossen sind
-        foreach (Coroutine rot in rotations)
-        {
-            yield return rot;
-        }
-
-        // Index aktualisieren
-        currentPageIndex++;
-        Debug.Log("Updated Page Index - forward: " + currentPageIndex);
-    }
-    else if (direction == "backward")
-    {
-        Debug.Log("Current Page Index - backward: " + currentPageIndex);
-
-        // Index aktualisieren, _bevor_ die Animationen starten
-        currentPageIndex--;
-        Debug.Log("Updated Page Index - backward: " + currentPageIndex);
-
-        // Aktuelle Seite zurückklappen
-        if (currentPageIndex < pages.Length && pages[currentPageIndex] != null)
-        {
-            rotations.Add(StartCoroutine(RotatePage(pages[currentPageIndex], -180f)));
-
-            // Vorherige Seite wieder aufklappen
-            if (currentPageIndex > 0) //Stell sicher, dass es eine vorherige Seite gibt
+            if (currentPageIndex >= 0 && currentPageIndex < pages.Length - 1 && pages[currentPageIndex] != null && pages[nextPageIndex] != null)
             {
-                rotations.Add(StartCoroutine(RotatePage(pages[currentPageIndex - 1], -180f))); //Vorherige Seite aufklappen
+                rotations.Add(StartCoroutine(AnimatePagePosition(pages[currentPageIndex], 0.005f)));
+                rotations.Add(StartCoroutine(AnimatePagePosition(pages[nextPageIndex], 0.0049f)));
+                rotations.Add(StartCoroutine(RotatePage(pages[currentPageIndex], 180f)));
+                rotations.Add(StartCoroutine(RotatePage(pages[nextPageIndex], 180f)));
+                rotations.Add(StartCoroutine(AnimatePagePosition(pages[currentPageIndex], -0.5f)));
+                rotations.Add(StartCoroutine(AnimatePagePosition(pages[nextPageIndex], 0.05f)));
             }
-        }
+            else
+            {
+                Debug.LogWarning("Current page index is out of bounds or page is null.");
+            }
 
-        // Warte, bis alle Rotationen abgeschlossen sind
-        foreach (Coroutine rot in rotations)
-        {
-            yield return rot;
+            foreach (Coroutine rot in rotations)
+            {
+                yield return rot;
+            }
+
+            currentPageIndex++;
+            Debug.Log("Updated Page Index - forward: " + currentPageIndex);
         }
+        else if (direction == "backward")
+        {
+            Debug.Log("Current Page Index - backward: " + currentPageIndex);
+
+            if (currentPageIndex > 0 && currentPageIndex < pages.Length && pages[currentPageIndex] != null && pages[prevPageIndex] != null)
+            {
+                rotations.Add(StartCoroutine(AnimatePagePosition(pages[currentPageIndex], 0.005f)));
+                rotations.Add(StartCoroutine(AnimatePagePosition(pages[prevPageIndex], 0.0049f)));
+                rotations.Add(StartCoroutine(RotatePage(pages[currentPageIndex], -180f)));
+                rotations.Add(StartCoroutine(RotatePage(pages[prevPageIndex], -180f)));
+                rotations.Add(StartCoroutine(AnimatePagePosition(pages[currentPageIndex], -0.5f)));
+                rotations.Add(StartCoroutine(AnimatePagePosition(pages[prevPageIndex], 0.05f)));
+            }
+            else
+            {
+                Debug.LogWarning("Current page index is out of bounds or page is null.");
+            }
+
+            foreach (Coroutine rot in rotations)
+            {
+                yield return rot;
+            }
+
+            currentPageIndex--;
+            Debug.Log("Updated Page Index - backward: " + currentPageIndex);
+        }
+        
+        isRotating = false;
     }
 
-    isRotating = false; // Rotation abgeschlossen → weitere Eingaben möglich
-}
-
-
-    // Einzelne Seite rotieren (Auf- oder Zuklappen)
     private IEnumerator RotatePage(Transform page, float angle)
     {
-        // Starte von der aktuellen Rotation
         Quaternion startRot = page.rotation;
-
-        // Zielrotation: Drehe um den angegebenen Winkel (meist 180 oder -180 Grad um die X-Achse)
         Quaternion endRot = startRot * Quaternion.Euler(angle, 0f, 0f);
 
         float elapsed = 0f;
 
-        // Übergang über "rotationDuration" Sekunden hinweg
         while (elapsed < rotationDuration)
         {
             page.rotation = Quaternion.Slerp(startRot, endRot, elapsed / rotationDuration);
@@ -144,30 +157,24 @@ public class PageManager : MonoBehaviour
             yield return null;
         }
 
-        // Am Ende die Rotation exakt setzen, um Ungenauigkeiten zu vermeiden
         page.rotation = endRot;
     }
-
-
-    //Methode zur Entgegennahme der Rotationsliste, um sie zu erweitern
-    private IEnumerator AnimatePagePosition(Transform page, float targetYOffset, bool raise, List<Coroutine> rotations)
+    private IEnumerator AnimatePagePosition(Transform page, float targetYOffset)
     {
-        if (page == null) yield break;
+        Vector3 startPos = page.localPosition;
+        Vector3 endPos = new Vector3(startPos.x, targetYOffset, startPos.z);
 
-        float startY = page.localPosition.y;
-        float targetY = startY + targetYOffset * (raise ? 1 : -1);
         float elapsed = 0f;
 
-        float animationDuration = rotationDuration / 2f;
-
-        while (elapsed < animationDuration)
+        while (elapsed < rotationDuration)
         {
-            float newY = Mathf.Lerp(startY, targetY, elapsed / animationDuration);
-            page.localPosition = new Vector3(page.localPosition.x, newY, page.localPosition.z);
+            page.localPosition = Vector3.Lerp(startPos, endPos, elapsed / rotationDuration);
             elapsed += Time.deltaTime;
             yield return null;
         }
+
+        page.localPosition = endPos;
     }
 
-}
+
 }
