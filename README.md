@@ -17,3 +17,8 @@ https://ambientcg.com
 Credits:
 https://ambientcg.com/view?id=Marble021
 https://polyhaven.com/a/kloppenheim_07_puresky
+https://sketchfab.com/3d-models/3d-lowpoly-arrow-644bbdbf1a5c4ae7befde39a02e62c7d, Date: 20.05.2025
+https://sketchfab.com/3d-models/cone-91575569962c447a93d15c0fff5c6d26#download, Date: 20.05.2025
+https://sketchfab.com/3d-models/tree-b5183be5d2d447f09b9dab247808b010#download, Date: 20.05.2025
+https://sketchfab.com/3d-models/monstera-tree-6d219fec989947698609f1b6945e009c, Date 20.05.2025
+
