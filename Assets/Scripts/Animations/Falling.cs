@@ -17,7 +17,7 @@ public class Falling : MonoBehaviour
     void Update()
     {
         // Optional: Falls du willst, dass es sich beim Fallen nicht bewegt
-        if (isFalling && rb.velocity.magnitude < 0.1f)
+        if (isFalling && rb.linearVelocity.magnitude < 0.1f)
         {
             // Gelandet (quasi still)
             StopFall();
@@ -38,7 +38,7 @@ public class Falling : MonoBehaviour
     {
         rb.isKinematic = true;
         rb.useGravity = false;
-        rb.velocity = Vector3.zero;
+        rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         isFalling = false;
     }
