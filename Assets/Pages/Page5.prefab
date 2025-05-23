@@ -729,7 +729,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 021aff742abec4ed480a7ea34f63a5af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: 360 Video - Brandenburg
+  sceneName: 360 Video - Mataro
 --- !u!1 &8896103710884272857
 GameObject:
   m_ObjectHideFlags: 0
