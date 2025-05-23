@@ -6804,6 +6804,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PageLeft
       objectReference: {fileID: 0}
+    - target: {fileID: 2222002092930802874, guid: 7ce1f1babcab06e46b7fe5ed531183c6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 81.1
+      objectReference: {fileID: 0}
     - target: {fileID: 3614664961133204646, guid: 7ce1f1babcab06e46b7fe5ed531183c6, type: 3}
       propertyPath: m_LocalScale.y
       value: 0.05
