@@ -6739,7 +6739,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b546bef15d654185a7055d206ebc26d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 7
+  moveSpeed: 15
   mouseSensitivity: 2
   verticalRotationLimit: 80
   jumpHeight: 2
