@@ -25,5 +25,6 @@ https://sketchfab.com/3d-models/tree-b5183be5d2d447f09b9dab247808b010#download, 
 https://sketchfab.com/3d-models/monstera-tree-6d219fec989947698609f1b6945e009c, Date 20.05.2025
 https://sketchfab.com/3d-models/glass-icosahedral-dome-58eae05775224b9080b87124743b8f5b#download, Date 22.05.2025
 https://sketchfab.com/3d-models/uxr-circle-rotating-ring-e1ec7c0ea9314a689feecba3ca4c8240#download, Date 23.05.2025
+https://sketchfab.com/3d-models/exit-sign-8b3950f86df14ec291224f6c868609c3#download, Date 25.05.2025
 
 

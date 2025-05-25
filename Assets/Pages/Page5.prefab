@@ -607,7 +607,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 021aff742abec4ed480a7ea34f63a5af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: 360 Video - Brandenburg
+  sceneName: 360 Video - Beach
 --- !u!1 &8135446501393990448
 GameObject:
   m_ObjectHideFlags: 0
@@ -1249,6 +1249,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: ae3cefe72edfa4f5282f83a36862e320, type: 3}
       propertyPath: m_Name
       value: Dome 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ae3cefe72edfa4f5282f83a36862e320, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7314401885852205682, guid: ae3cefe72edfa4f5282f83a36862e320, type: 3}
       propertyPath: m_IsActive
